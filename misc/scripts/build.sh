@@ -667,7 +667,7 @@ function install_deb() {
         for pkg in "${replaces[@]}"; do
         	sudo dpkg -r --force-all "${pkg}"
         done
-		sudo dpkg -i "$STAGEDIR/$debname.deb"
+		sudo dpkg -i "${STAGEDIR}/${debname}.deb"
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
         if ! sudo -E apt-get install --reinstall "$STAGEDIR/$debname.deb" -y --allow-downgrades 2> /dev/null; then
             echo -ne "\t"
