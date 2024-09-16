@@ -669,7 +669,7 @@ function install_deb() {
             	sudo dpkg -r --force-all "${pkg}"
             fi
         done
-		sudo dpkg -i ${debname}.deb
+		sudo dpkg -i "${PACDIR:?}/${debname}.deb"
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
         fi
