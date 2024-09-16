@@ -666,6 +666,7 @@ function install_deb() {
     if ((PACSTALL_INSTALL != 0)); then
         for pkg in "${replaces[@]}"; do
         	sudo dpkg -r --force-all "${pkg}"
+		 	sudo dpkg -i "${STAGEDIR:?}/${pacname}.deb"
         done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
         if ! sudo -E apt-get install --reinstall "$STAGEDIR/$debname.deb" -y --allow-downgrades 2> /dev/null; then
