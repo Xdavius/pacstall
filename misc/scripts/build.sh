@@ -666,14 +666,10 @@ function install_deb() {
     if ((PACSTALL_INSTALL != 0)); then
         for pkg in "${replaces[@]}"; do
             if is_apt_package_installed "${pkg}"; then
-                if [[ ${priority} == "essential" ]]; then
-                    sudo dpkg -r --force-all "${pkg}"
-                else
-                    sudo dpkg -r --force-all "${pkg}"
-                fi
+            	sudo dpkg -r --force-all "${pkg}"
             fi
         done
-
+		sudo dpkg -i ${debname}.deb
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
         fi
