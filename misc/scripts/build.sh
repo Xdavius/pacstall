@@ -667,9 +667,9 @@ function install_deb() {
         for pkg in "${replaces[@]}"; do
             if is_apt_package_installed "${pkg}"; then
                 if [[ ${priority} == "essential" ]]; then
-                    sudo apt-get remove -y "${pkg}" --allow-remove-essential
+                    sudo dpkg -r --force-all "${pkg}"
                 else
-                    sudo apt-get remove -y "${pkg}"
+                    sudo dpkg -r --force-all "${pkg}"
                 fi
             fi
         done
