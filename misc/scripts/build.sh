@@ -665,12 +665,18 @@ function install_deb() {
     local debname="${1}_${2}_${3}"
     if ((PACSTALL_INSTALL != 0)); then
         for pkg in "${replaces[@]}"; do
-            if is_apt_package_installed "${pkg}"; then
-            	sudo dpkg -r --force-all "${pkg}"
-            fi
+        	sudo dpkg -r --force-all "${pkg}"
         done
-		sudo dpkg -r ${pacname}-dummy-builddeps
-  		sudo dpkg -i "${STAGEDIR:?}/${debname}.deb"
+        # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
+        if ! sudo -E apt-get install --reinstall "$STAGEDIR/$debname.deb" -y --allow-downgrades 2> /dev/null; then
+            echo -ne "\t"
+            fancy_message error $"Failed to install %s deb" "$pacname"
+            error_log 8 "install $pacname"
+            sudo dpkg -r --force-all "${gives:-$pacname}" 2> /dev/null
+            fancy_message info $"Cleaning up"
+            cleanup
+            exit 1
+        fi
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
         fi
