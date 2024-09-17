@@ -664,12 +664,20 @@ function install_deb() {
     { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
     local debname="${1}_${2}_${3}"
     if ((PACSTALL_INSTALL != 0)); then
-        for pkg in "${replaces[@]}"; do
-        	sudo dpkg -r --force-all "${pkg}"
-        done
-		sudo dpkg -i "${STAGEDIR}/${debname}.deb"
+        #for pkg in "${replaces[@]}"; do
+        	#sudo dpkg -r --force-all "${pkg}"
+        #done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
-        if ! sudo -E apt-get install --reinstall "$STAGEDIR/$debname.deb" -y --allow-downgrades 2> /dev/null; then
+        if ! sudo -E dpkg -i "${STAGEDIR}/${debname}.deb" 2> /dev/null; then
+            echo -ne "\t"
+            fancy_message error $"Failed to install %s deb" "$pacname"
+            error_log 8 "install $pacname"
+            sudo dpkg -r --force-all "${gives:-$pacname}" 2> /dev/null
+            fancy_message info $"Cleaning up"
+            cleanup
+            exit 1
+        fi
+		if ! sudo -E apt-get -f install -y 2> /dev/null; then
             echo -ne "\t"
             fancy_message error $"Failed to install %s deb" "$pacname"
             error_log 8 "install $pacname"
