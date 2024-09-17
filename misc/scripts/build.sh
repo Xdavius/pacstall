@@ -689,7 +689,7 @@ function install_deb() {
         fi
         local combined_pinning=("${provides[@]}" "${gives:-${pacname}}")
         echo "Package: ${combined_pinning[*]}" | sudo tee "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
-        echo "Pin: version ${pkgver}" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
+        echo "Pin: version ${full_version}" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
         echo "Pin-Priority: 1001" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
         return 0
     else
