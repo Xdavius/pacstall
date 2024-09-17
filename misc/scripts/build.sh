@@ -677,6 +677,7 @@ function install_deb() {
             fancy_message info $"Cleaning up"
             cleanup
             exit 1
+			fi
 		else   
    			sudo -E dpkg -i "${STAGEDIR}/${debname}.deb"
 	  		if ! sudo -E apt-get -f install -y 2> /dev/null; then
@@ -687,6 +688,7 @@ function install_deb() {
             fancy_message info $"Cleaning up"
             cleanup
             exit 1
+			fi
         fi
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
