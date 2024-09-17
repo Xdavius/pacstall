@@ -681,7 +681,7 @@ function install_deb() {
 		else   
    			sudo -E dpkg --unpack "${STAGEDIR}/${debname}.deb"
 	  		 sudo -E apt-get -f install -y 
-      sudo -E dpkg --configure "${STAGEDIR}/${debname}.deb"
+      sudo -E dpkg --configure "$pacname"
         fi
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
