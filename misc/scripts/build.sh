@@ -665,7 +665,7 @@ function install_deb() {
     local debname="${1}_${2}_${3}"
     if ((PACSTALL_INSTALL != 0)); then
         for pkg in "${replaces[@]}"; do
-        	sudo dpkg -r --force-all "${pkg}" > /dev/null
+        	sudo dpkg -r --force-all "${pkg}" > /dev/null 2>&1
         done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
         sudo -E dpkg -i "${STAGEDIR}/${debname}.deb" 2> /dev/null
@@ -690,7 +690,7 @@ function install_deb() {
         local combined_pinning=("${provides[@]}" "${gives:-${pacname}}")
         echo "Package: ${combined_pinning[*]}" | sudo tee "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
         echo "Pin: version *" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
-        echo "Pin-Priority: -1" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
+        echo "Pin-Priority: 0" | sudo tee -a "/etc/apt/preferences.d/${pacname//./-}-pin" > /dev/null
         return 0
     else
         sudo mv "$STAGEDIR/$debname.deb" "$PACDEB_DIR"
