@@ -669,7 +669,7 @@ function install_deb() {
         done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
         run_install="sudo -E dpkg -i "${STAGEDIR}/${debname}.deb" 2> /dev/null && sudo -E apt-get -f install -y 2> /dev/null"
-		if ! $(runinstall); then
+		if ! $(run_install); then
             echo -ne "\t"
             fancy_message error $"Failed to install %s deb" "$pacname"
             error_log 8 "install $pacname"
