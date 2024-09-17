@@ -668,7 +668,7 @@ function install_deb() {
         	sudo dpkg -r --force-all "${pkg}" &> /dev/null
         done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
-		 if  [[ "$debname" == *"dummy-builddeps = true"* ]]; then
+		 if  [[ "${debname}" == *"dummy-builddeps"* ]]; then
 			if ! sudo -E apt-get install --reinstall "$STAGEDIR/$debname.deb" -y --allow-downgrades 2> /dev/null; then
             echo -ne "\t"
             fancy_message error $"Failed to install %s deb" "$pacname"
