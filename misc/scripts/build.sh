@@ -665,7 +665,7 @@ function install_deb() {
     local debname="${1}_${2}_${3}"
     if ((PACSTALL_INSTALL != 0)); then
         for pkg in "${replaces[@]}"; do
-        	sudo dpkg -r --force-all "${pkg}"
+        	sudo dpkg -r --force-all "${pkg}" 2> /dev/null
         done
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
         sudo -E dpkg -i "${STAGEDIR}/${debname}.deb" 2> /dev/null
