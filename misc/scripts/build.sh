@@ -679,16 +679,9 @@ function install_deb() {
             exit 1
 			fi
 		else   
-   			sudo -E dpkg -i "${STAGEDIR}/${debname}.deb"
-	  		if ! sudo -E apt-get -f install -y 2> /dev/null; then
-            echo -ne "\t"
-            fancy_message error $"Failed to install %s deb" "$pacname"
-            error_log 8 "install $pacname"
-            sudo dpkg -r --force-all "${gives:-$pacname}" 2> /dev/null
-            fancy_message info $"Cleaning up"
-            cleanup
-            exit 1
-			fi
+   			sudo -E dpkg --unpack "${STAGEDIR}/${debname}.deb"
+	  		 sudo -E apt-get -f install -y 
+      sudo -E dpkg --configure "${STAGEDIR}/${debname}.deb"
         fi
         if [[ -f "${PACDIR}-pacdeps-$pacname" ]]; then
             sudo apt-mark auto "${gives:-$pacname}" 2> /dev/null
