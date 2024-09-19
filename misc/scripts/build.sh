@@ -666,10 +666,10 @@ function install_deb() {
     if ((PACSTALL_INSTALL != 0)); then
 		if is_apt_package_installed "${pkg}"; then
   			if [[ ${priority} == "essential" ]]; then
-	 				for pkgs in "${replaces[@]}"; do
-        			sudo dpkg -r --force-all "${pkgs}" &> /dev/null
-        			done
-                    sudo dpkg -r --force-all "${pkg}" &> /dev/null
+	 			for pkgs in "${replaces[@]}"; do
+        		sudo dpkg -r --force-all "${pkgs}" &> /dev/null
+        		done
+                sudo dpkg -r --force-all "${pkg}" &> /dev/null
             fi
 		fi
         # --allow-downgrades is to allow git packages to "downgrade", because the commits aren't necessarily a higher number than the last version
