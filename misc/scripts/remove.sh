@@ -26,8 +26,12 @@
 { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
 
 function clean_rem_pac() {
+if [[ -e "${METADIR:?}/${_name}" ]]; then
 sudo rm -f "${METADIR:?}/${_name}"
+fi
+if [[ -e "/etc/apt/preferences.d/${_name//./-}-pin" ]]; then
 sudo rm -f "/etc/apt/preferences.d/${_name//./-}-pin"
+fi
 }
 
 source "$METADIR/$PACKAGE" 2> /dev/null || {
@@ -36,9 +40,9 @@ source "$METADIR/$PACKAGE" 2> /dev/null || {
 }
 
 if ! dpkg -l "${_gives:-$_name}" &> /dev/null; then
+	clean_rem_pac
     fancy_message error $"%s is not installed" "$PACKAGE"
 	fancy_message error $"%s removed from pacstall db" "$PACKAGE"
- 	sudo rm -f "${METADIR:?}/${_name}"
     exit 1
 fi
 
