@@ -25,6 +25,11 @@
 # shellcheck disable=SC2034
 { ignore_stack=false; set -o pipefail; trap stacktrace ERR RETURN; }
 
+function clean_rem_pac() {
+sudo rm -f "${METADIR:?}/${_name}"
+sudo rm -f "/etc/apt/preferences.d/${_name//./-}-pin"
+}
+
 source "$METADIR/$PACKAGE" 2> /dev/null || {
     fancy_message error $"%s is not installed" "$PACKAGE"
     exit 1
@@ -37,6 +42,7 @@ if ! dpkg -l "${_gives:-$_name}" &> /dev/null; then
 fi
 
 sudo apt-get purge "${_gives:-$_name}" -y || {
+	clean_rem_pac
     error_log 1 "remove $PACKAGE"
     exit 1
 }
@@ -47,6 +53,4 @@ if [[ -n ${_ppa[*]} ]]; then
     done
 fi
 
-sudo rm -f "${METADIR:?}/${_name}"
-sudo rm -f "/etc/apt/preferences.d/${_name//./-}-pin"
 # vim:set ft=sh ts=4 sw=4 et:
