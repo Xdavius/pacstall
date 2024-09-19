@@ -31,6 +31,7 @@ source "$METADIR/$PACKAGE" 2> /dev/null || {
 }
 
 if ! dpkg -l "${_gives:-$_name}" &> /dev/null; then
+	sudo rm -f "${METADIR:?}/${_name}"
     fancy_message error $"%s is not installed" "$PACKAGE"
     exit 1
 fi
